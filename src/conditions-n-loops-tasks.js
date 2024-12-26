@@ -613,31 +613,27 @@ function getNearestBigger(number) {
     return numbers;
   }
 
-  function findNumberIndex(arr, n) {
-    for (let i = 0; i < arr.length; i += 1) {
-      if (arr[i] === n) return i;
-    }
-    return -1;
-  }
+  const a = numberToArray(number);
+  let n = number;
 
-  function isValidNumber(n, arr) {
-    const temp = [...arr];
-    const a = numberToArray(n);
-    for (let i = 0; i < a.length; i += 1) {
-      const index = findNumberIndex(temp, a[i]);
+  function isValidDigits(numberToTest) {
+    const baseArr = [...a];
+    const arrayToTest = numberToArray(numberToTest);
+    if (arrayToTest.length > baseArr.length) return null;
+
+    for (let i = 0; i < arrayToTest.length; i += 1) {
+      const index = baseArr.findIndex((v) => v === arrayToTest[i]);
       if (index === -1) return false;
-      temp.splice(index, 1);
+      baseArr.splice(index, 1);
     }
-    return true;
+    return baseArr.length === 0;
   }
 
-  let s = number;
-  const arr = numberToArray(number);
-  const limit = new Array(arr.length).fill(9).join('') * 1;
-
-  while (s < limit) {
-    s += 1;
-    if (isValidNumber(s, arr)) return s;
+  while (n > 0) {
+    n += 1;
+    const isValid = isValidDigits(n);
+    if (isValid === null) return number;
+    if (isValid === true) return n;
   }
 
   return number;
